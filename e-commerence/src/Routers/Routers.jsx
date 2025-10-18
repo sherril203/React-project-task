@@ -13,6 +13,7 @@ import Purchase from '../Pages/Buy products/Purchase';
 import Success from '../Pages/Buy products/Success';
 import Confirmation from '../Pages/Buy products/Confirmation';
 import Orders from '../Pages/Orders/Orders';
+import ProductInfo from '../Pages/Products/ProductInfo';
 const Routers = () => {
   return (
    <Routes>
@@ -25,6 +26,8 @@ const Routers = () => {
       <Route path="/confirm" element={<Confirmation/>} />
       
       <Route path="/success" element={<Success/>} />
+       <Route path="/product/:id" element={<ProductInfo/>} />
+
       <Route path="/user" element={<UserLayout/>}>
       <Route path="/user/dashboard" element={<User/>}/>
       <Route path="profile" element={<Profile/>}/>

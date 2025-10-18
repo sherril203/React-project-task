@@ -42,8 +42,7 @@ const Confirmationpage = () => {
           <div className="space-y-3 text-gray-700">
             <p><strong>Product:</strong> {data.product_name}</p>
             <p><strong>Quantity:</strong> {data.quantity}</p>
-            <p><strong>Total Price:</strong> ₹{data.product_price}</p>
-            <p><strong>Customization:</strong> {data.customization}</p>
+            <p><strong>Total Price:</strong> ${data.product_price}</p>
             <p><strong>Customer Name:</strong> {data.customer_name}</p>
             <p><strong>Email:</strong> {data.customer_email}</p>
             <p><strong>Mobile:</strong> {data.mobile_no}</p>

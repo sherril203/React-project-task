@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Navbar from '../../Common/Navbar';
 import Footer from '../../Common/Footer';
 import axios from 'axios';
-import { useNavigate } from 'react-router';
+import { useNavigate, Link } from 'react-router'; 
 
 const Products = () => {
   const [data, setData] = useState([]);
@@ -117,14 +117,17 @@ const Products = () => {
               key={item.id}
               className="bg-white shadow-md p-4 rounded-md hover:shadow-lg transition"
             >
-              <img
-                src={item.image}
-                alt={item.title}
-                className="w-full h-48 object-contain mb-4"
-              />
-              <h3 className="font-semibold text-lg mb-2 line-clamp-2">
-                {item.title}
-              </h3>
+              {/* ✅ Wrap image and title in Link to product detail */}
+              <Link to={`/product/${item.id}`}>
+                <img
+                  src={item.image}
+                  alt={item.title}
+                  className="w-full h-48 object-contain mb-4"
+                />
+                <h3 className="font-semibold text-lg mb-2 line-clamp-2 hover:text-amber-500 transition">
+                  {item.title}
+                </h3>
+              </Link>
               <p className="text-gray-600 mb-1">⭐ {item.rating?.rate} / 5</p>
               <p className="text-gray-800 font-bold mb-1">${item.price}</p>
               <p className="text-sm text-gray-500 mb-3">{item.category}</p>

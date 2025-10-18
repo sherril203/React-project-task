@@ -35,7 +35,7 @@ const Orders = () => {
             >
               <h3 className="text-xl font-semibold text-gray-800 mb-2">{order.product_name}</h3>
               <p className="text-gray-600"><strong>Quantity:</strong> {order.quantity}</p>
-              <p className="text-gray-600"><strong>Total Price:</strong> ₹{order.product_price}</p>
+              <p className="text-gray-600"><strong>Total Price:</strong> ${order.product_price}</p>
               <p className="text-gray-600"><strong>Customer:</strong> {order.customer_name}</p>
               <p className="text-gray-600"><strong>Email:</strong> {order.customer_email}</p>
               <p className="text-gray-600"><strong>Mobile:</strong> {order.mobile_no}</p>
