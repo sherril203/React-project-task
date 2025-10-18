@@ -58,7 +58,7 @@ const Purchase = () => {
   };
 
   return (
-    <div className="p-6 mt-18 text-center bg-stone-100">
+    <div className="p-6 mt-18 text-center bg-gray-50">
       <form
         onSubmit={handleSubmit}
         className="bg-white rounded p-6 w-full max-w-4xl mx-auto shadow-md"

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { MdAccountCircle } from "react-icons/md";
-import { Link, useNavigate } from 'react-router'; // ✅ Fixed import
+import { Link, useNavigate } from 'react-router'; 
 import Navbar from '../../Common/Navbar';
 import Footer from '../../Common/Footer';
 
 const Profile = () => {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // ✅ Loading state
-  const navigate = useNavigate(); // ✅ For programmatic navigation
+  const [loading, setLoading] = useState(true); 
+  const navigate = useNavigate(); 
 
   useEffect(() => {
 
@@ -36,7 +36,7 @@ const Profile = () => {
   }
 
   return (
-    <div className='bg-stone-100 min-h-screen flex flex-col mt-20'>
+    <div className='bg-gray-50 min-h-screen flex flex-col mt-20'>
       <Navbar />
       <div className='flex-grow flex justify-center items-start mt-10 mb-10'>
         <div className='rounded p-6 bg-white w-full max-w-md shadow-md' data-aos="fade-up">
@@ -45,7 +45,6 @@ const Profile = () => {
             <MdAccountCircle size={150} />
           </div>
 
-          {/* User Info */}
           <div className='space-y-3'>
             <h3 className='text-center text-lg font-medium'>
               {user.username}
@@ -64,7 +63,6 @@ const Profile = () => {
             </h3>
           </div>
 
-          {/* Action Buttons */}
           <div className='flex justify-center gap-3 mt-6'>
             <Link to="/editProfile" className='px-4 py-2 bg-gradient-to-l from-fuchsia-200 to-pink-300 rounded hover:opacity-90 transition'>
               Edit Profile

@@ -20,7 +20,7 @@ const Orders = () => {
   };
 
   return (
-    <div className="bg-stone-100 min-h-screen">
+    <div className="bg-gray-50 min-h-screen">
       <Navbar />
       <h2 className="text-center font-bold text-3xl text-stone-700 mt-20 mb-8">My Orders</h2>
 

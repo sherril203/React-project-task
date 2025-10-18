@@ -18,13 +18,11 @@ const Navbar = () => {
   const navigate = useNavigate();
   const dropdownRef = useRef();
 
-  // Check login state
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem("user"));
     setIsLoggedIn(!!user);
   }, []);
 
-  // Listen for login/logout across tabs
   useEffect(() => {
     const handleStorageChange = () => {
       const user = JSON.parse(localStorage.getItem("user"));
@@ -34,7 +32,6 @@ const Navbar = () => {
     return () => window.removeEventListener("storage", handleStorageChange);
   }, []);
 
-  // Close profile dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -56,13 +53,13 @@ const Navbar = () => {
   return (
     <div className="fixed top-0 left-0 right-0 w-full bg-stone-100 shadow-lg z-30">
       <nav className="flex justify-between items-center px-6 py-4">
-        {/* Logo */}
+
         <div className="font-extrabold text-stone-700 text-2xl flex items-center">
           <img src={logo} alt="Logo" width="50" className="mr-2" />
           <Link to="/">Products World</Link>
         </div>
 
-        {/* Desktop Nav */}
+
         <div className="hidden lg:block">
           <ul className="flex gap-8 text-lg font-medium text-stone-700">
             <li className="hover:text-stone-500 transition">
@@ -83,11 +80,10 @@ const Navbar = () => {
           </ul>
         </div>
 
-        {/* Right Side */}
         <div className="hidden lg:flex items-center gap-4">
           {isLoggedIn ? (
             <>
-              {/* Cart */}
+         
               <Link
                 to="/user/cart"
                 className="flex items-center gap-2 text-stone-700 text-lg font-semibold 
@@ -141,7 +137,7 @@ const Navbar = () => {
           )}
         </div>
 
-        {/* Mobile toggle */}
+     
         <button
           onClick={() => setOpen(!open)}
           className="lg:hidden p-2 rounded-xl bg-stone-300 text-stone-700 hover:bg-white/30 transition"
@@ -150,7 +146,6 @@ const Navbar = () => {
         </button>
       </nav>
 
-      {/* Mobile Nav */}
       {open && (
         <div className="lg:hidden bg-stone-100 text-stone-700 px-4 py-6 border-t border-stone-200">
           <ul className="flex flex-col gap-4 text-lg">

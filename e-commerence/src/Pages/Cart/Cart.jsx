@@ -32,7 +32,7 @@ const Cart = () => {
   );
 
   return (
-    <div className="bg-stone-100 min-h-screen">
+    <div className="bg-gray-50 min-h-screen">
       <Navbar />
       <h2 className="text-center font-bold text-3xl text-stone-700 p-5 mt-20">
         Cart

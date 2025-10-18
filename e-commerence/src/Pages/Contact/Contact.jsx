@@ -12,15 +12,12 @@ const Contact = () => {
     <div className="bg-gray-50  min-h-screen flex flex-col">
       <Navbar />
 
-      {/* Page Title */}
       <h2 className="text-center font-bold text-4xl text-black mt-23 mb-8">
         Contact Us
       </h2>
 
-      {/* Main Content */}
       <div className="flex flex-col lg:flex-row justify-center items-start gap-10 max-w-6xl mx-auto w-full px-4 md:px-6 pb-16">
-        
-        {/* Contact Info */}
+
         <div className="space-y-8 w-full max-w-md">
           <div className="bg-white rounded-lg px-8 py-6 shadow-md text-black">
             <div className="flex items-center gap-2 mb-2">
@@ -36,7 +33,6 @@ const Contact = () => {
             <p className="text-lg ml-8">1234567890</p>
           </div>
 
-          {/* Social Links */}
           <div className="bg-white rounded-lg px-8 py-6 shadow-md text-black">
             <h3 className="text-2xl font-bold text-center mb-4">Follow Us</h3>
             <div className="flex justify-center gap-6">
@@ -54,11 +50,8 @@ const Contact = () => {
               </a>
             </div>
           </div>
-        </div>
-
-      
+        </div>  
       </div>
-
       <Footer />
     </div>
   );
