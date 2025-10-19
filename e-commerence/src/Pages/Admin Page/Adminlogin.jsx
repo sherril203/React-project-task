@@ -1,61 +1,38 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router";
+import { useNavigate, Link } from "react-router";
 
-const SignUp = () => {
-  const [username, setUsername] = useState("");
+const Adminlogin = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleSignup = (e) => {
+  const handleLogin = (e) => {
     e.preventDefault();
 
-    if (!username || !email || !password) {
-      setError("All fields are required.");
-      return;
-    }
-
-    const existingUser = JSON.parse(localStorage.getItem("user"));
-    if (existingUser && existingUser.email === email) {
-      setError("User already exists. Please login instead.");
+    if (!email || !password) {
+      setError("Please enter both email and password.");
       return;
     }
 
 
-    const newUser = { username, email, password };
-    localStorage.setItem("user", JSON.stringify(newUser));
-
-    setUsername("");
+    const mockUser = { email, name: "Admin" };
+    localStorage.setItem("user", JSON.stringify(mockUser));
+    localStorage.setItem("token", "dummy_token"); 
     setEmail("");
     setPassword("");
     setError("");
-
-    navigate("/login");
+    navigate("/admin/dashboard"); 
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-stone-100">
       <div className="bg-white mt-16 border border-stone-300 p-8 rounded-xl shadow-md w-full max-w-md">
         <h1 className="text-center font-bold text-3xl mb-6 text-stone-800">
-          Sign Up
+          Admin Login
         </h1>
 
-        <form onSubmit={handleSignup} className="space-y-4">
-          <div>
-            <label htmlFor="username" className="block mb-1 font-medium text-stone-700">
-              Username
-            </label>
-            <input
-              type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              placeholder="Enter username"
-              className="w-full p-3 rounded border-amber-400 border-2 focus:outline-none focus:ring-2 focus:ring-amber-300"
-            />
-          </div>
-
+        <form onSubmit={handleLogin} className="space-y-4">
           <div>
             <label htmlFor="email" className="block mb-1 font-medium text-stone-700">
               Email
@@ -90,14 +67,13 @@ const SignUp = () => {
             type="submit"
             className="w-full bg-amber-400 p-4 rounded text-xl text-white font-semibold hover:bg-amber-500 transition"
           >
-
-            Sign Up
+            Login
           </button>
 
           <p className="text-center text-stone-700">
-            Already registered?{" "}
-            <Link to="/login" className="text-blue-600 font-bold underline">
-              Login
+            New Admin?{" "}
+            <Link to="/adminRegister" className="text-blue-600 font-bold underline">
+              Sign Up
             </Link>
           </p>
         </form>
@@ -106,4 +82,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default Adminlogin;

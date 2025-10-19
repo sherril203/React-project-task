@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../../Common/Navbar';
-import Footer from '../../Common/Footer';
 
-const Orders = () => {
+const statuses = ['Pending', 'Processing', 'Shipped', 'Delivered', 'Cancelled'];
+
+const AdminOrders = () => {
   const [orders, setOrders] = useState([]);
 
   useEffect(() => {
@@ -18,38 +18,16 @@ const Orders = () => {
     }
   }, []);
 
-  // Sync across tabs/windows
-  useEffect(() => {
-    const handleStorageChange = (event) => {
-      if (event.key === 'orders') {
-        try {
-          const updatedOrders = JSON.parse(event.newValue);
-          if (Array.isArray(updatedOrders)) {
-            setOrders(updatedOrders);
-          }
-        } catch {}
-      }
-    };
-
-    window.addEventListener('storage', handleStorageChange);
-    return () => window.removeEventListener('storage', handleStorageChange);
-  }, []);
-
-  const handleCancel = (id) => {
-    const confirmed = window.confirm('Are you sure you want to cancel this order?');
-    if (!confirmed) return;
-
+  const handleStatusChange = (id, newStatus) => {
     const updatedOrders = orders.map(order =>
-      order.id === id ? { ...order, status: 'Cancelled' } : order
+      order.id === id ? { ...order, status: newStatus } : order
     );
-
     setOrders(updatedOrders);
     localStorage.setItem('orders', JSON.stringify(updatedOrders));
   };
 
   return (
     <div className="bg-gray-50 min-h-screen">
-      <Navbar />
       <h2 className="text-center font-bold text-3xl text-stone-700 mt-20 mb-8">My Orders</h2>
 
       <div className="max-w-6xl mx-auto px-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pb-20">
@@ -69,25 +47,27 @@ const Orders = () => {
               <p className="text-gray-600"><strong>Mobile:</strong> {order.mobile_no}</p>
               <p className="text-gray-600"><strong>Address:</strong> {order.address}</p>
               <p className="text-gray-600"><strong>Payment Mode:</strong> {order.payment_mode}</p>
-              <p className="text-gray-600"><strong>Status:</strong> {order.status || 'Pending'}</p>
 
-              <button
-                onClick={() => handleCancel(order.id)}
-                disabled={order.status === 'Cancelled'}
-                className={`mt-4 w-full py-2 rounded text-white ${
-                  order.status === 'Cancelled' ? 'bg-gray-400 cursor-not-allowed' : 'bg-red-500 hover:bg-red-600'
-                }`}
+              <label className="block font-semibold text-gray-700 mt-4 mb-1" htmlFor={`status-${order.id}`}>
+                Status:
+              </label>
+              <select
+                id={`status-${order.id}`}
+                value={order.status || 'Pending'}
+                onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                className="w-full border rounded p-2"
               >
-                {order.status === 'Cancelled' ? 'Order Cancelled' : 'Cancel Order'}
-              </button>
+                {statuses.map((status) => (
+                  <option key={status} value={status}>{status}</option>
+                ))}
+              </select>
             </div>
           ))
         )}
       </div>
 
-      <Footer />
     </div>
   );
 };
 
-export default Orders;
+export default AdminOrders;

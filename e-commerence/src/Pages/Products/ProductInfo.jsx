@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { Link, useParams } from 'react-router';  
+import React, { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router'; 
 import Navbar from '../../Common/Navbar';
 import Footer from '../../Common/Footer';
-import { FaStar } from 'react-icons/fa';
-
+import { FaStar, FaHeart, FaRegHeart } from 'react-icons/fa';
 
 const ProductInfo = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [count, setCount] = useState(1);
- 
+  const [isWishlisted, setIsWishlisted] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -17,6 +17,10 @@ const ProductInfo = () => {
         const response = await fetch(`https://fakestoreapi.com/products/${id}`);
         const data = await response.json();
         setProduct(data);
+
+        const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+        const alreadyWishlisted = wishlist.some(item => item.id === data.id);
+        setIsWishlisted(alreadyWishlisted);
       } catch (error) {
         console.error("Error fetching product:", error);
       }
@@ -50,6 +54,41 @@ const ProductInfo = () => {
     alert("Item added to cart!");
   };
 
+  const toggleWishlist = () => {
+    const wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+    const exists = wishlist.some(item => item.id === product.id);
+
+    let updatedWishlist;
+    if (exists) {
+      updatedWishlist = wishlist.filter(item => item.id !== product.id);
+      alert('Removed from Wishlist');
+    } else {
+      updatedWishlist = [...wishlist, product];
+      alert('Added to Wishlist');
+    }
+
+    localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+    setIsWishlisted(!exists);
+  };
+
+  const handleBuyNow = () => {
+    if (!product) return;
+
+    const unitPrice = Number(product.price);
+    const totalPrice = (count * unitPrice).toFixed(2);
+
+    navigate('/purchase', {
+      state: {
+        product: {
+          name: product.title,
+          price: unitPrice,
+          quantity: count,
+          totalPrice
+        }
+      }
+    });
+  };
+
   if (!product) {
     return (
       <div className="min-h-screen flex justify-center items-center bg-stone-100">
@@ -67,13 +106,20 @@ const ProductInfo = () => {
 
       <div className="p-6 flex-1">
         <div className="bg-white shadow p-6 rounded max-w-4xl mx-auto flex flex-col md:flex-row gap-6 mt-20">
-
-          <div className="flex-1 flex justify-center items-center">
+          <div className="flex-1 flex justify-center items-center relative">
             <img
               src={product.image}
               alt={product.title}
               className="w-full max-w-sm h-auto rounded-lg object-contain"
             />
+
+            <button
+              onClick={toggleWishlist}
+              className="absolute top-2 right-2 text-red-500 text-xl"
+              title={isWishlisted ? 'Remove from Wishlist' : 'Add to Wishlist'}
+            >
+              {isWishlisted ? <FaHeart size={24} /> : <FaRegHeart size={24} />}
+            </button>
           </div>
 
           <div className="flex-1 flex flex-col justify-center">
@@ -96,15 +142,19 @@ const ProductInfo = () => {
             <p className="text-gray-700 mb-4"><strong>Description:</strong> {product.description}</p>
 
             <div className="flex gap-4">
-              <button onClick={handleAddToCart} className="bg-amber-500 text-white px-4 py-2 rounded">
+              <button
+                onClick={handleAddToCart}
+                className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600"
+              >
                 Add to Cart
               </button>
 
-              <Link to="/purchase" state={{ product: { name: product.title, price: unitPrice, quantity: count } }}>
-                <button className="bg-green-500 text-white px-4 py-2 rounded">
-                  Buy Now
-                </button>
-              </Link>
+              <button
+                onClick={handleBuyNow}
+                className="bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600"
+              >
+                Buy Now
+              </button>
             </div>
           </div>
         </div>

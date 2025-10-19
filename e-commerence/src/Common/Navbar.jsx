@@ -3,13 +3,12 @@ import { Link, useNavigate } from "react-router";
 import { FaCartShopping, FaCartArrowDown } from "react-icons/fa6";
 import { TbHomeFilled } from "react-icons/tb";
 import { IoIosCall } from "react-icons/io";
-import { IoCloseOutline } from "react-icons/io5";
+import { IoCloseOutline,IoHeartOutline  } from "react-icons/io5";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { BiLogOut } from "react-icons/bi";
 import { LuLogIn, LuPackageCheck } from "react-icons/lu";
 import { MdOutlineFeed, MdAccountCircle } from "react-icons/md";
-
-import logo from "../assets/react.svg"; // Adjust path if needed
+import logo from "../assets/react.svg";
 
 const Navbar = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -51,7 +50,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="fixed top-0 left-0 right-0 w-full bg-stone-100 shadow-lg z-30">
+    <div className="fixed top-0 left-0 right-0 w-full bg-stone-100  z-30">
       <nav className="flex justify-between items-center px-6 py-4">
 
         <div className="font-extrabold text-stone-700 text-2xl flex items-center">
@@ -90,6 +89,13 @@ const Navbar = () => {
                 px-4 py-2 border border-stone-300 rounded-xl hover:bg-stone-500 hover:text-white transition"
               >
                 <FaCartArrowDown className="text-xl" /> Cart
+              </Link>
+               <Link
+                to="/user/wishlist"
+                className="flex items-center gap-2 text-stone-700 text-lg font-semibold 
+                px-4 py-2 border border-stone-300 rounded-xl hover:bg-stone-500 hover:text-white transition"
+              >
+                <IoHeartOutline size={30}/> 
               </Link>
 
               {/* Profile Dropdown */}
@@ -175,6 +181,11 @@ const Navbar = () => {
                 <li>
                   <Link to="/user/cart" className="flex items-center gap-2" onClick={() => setOpen(false)}>
                     <FaCartArrowDown /> Cart
+                  </Link>
+                </li>
+                 <li>
+                  <Link to="/user/wishlist" className="flex items-center gap-2" onClick={() => setOpen(false)}>
+                    <IoHeartOutline /> WishList
                   </Link>
                 </li>
                 <li>

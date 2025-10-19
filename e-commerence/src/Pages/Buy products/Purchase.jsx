@@ -1,184 +1,199 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
+import Navbar from '../../Common/Navbar';
 
 const Purchase = () => {
   const location = useLocation();
-  const product = location.state?.product;
   const navigate = useNavigate();
+  const product = location.state?.product;
 
-  // ✅ Fallback if product is not passed
-  if (!product) {
-    return (
-      <div className="min-h-screen flex justify-center items-center text-gray-600 text-lg">
-        No product selected. Please go back and choose a product.
-      </div>
-    );
-  }
+  const [form, setForm] = useState({
+    product_name: '',
+    quantity: 1,
+    customer_name: '',
+    customer_email: '',
+    mobile_no: '',
+    address: '',
+    payment_mode: '',
+  });
 
-  // ✅ Use correct keys (product.name, product.price, etc.)
-  const [productName] = useState(product?.name || '');
-  const [productPrice] = useState(product?.price || 0);
-  const [quantity, setQuantity] = useState(product?.quantity || 1);
+  const [totalPrice, setTotalPrice] = useState(0);
 
-  const [customerName, setCustomerName] = useState('');
-  const [customerEmail, setCustomerEmail] = useState('');
-  const [mobileNo, setMobileNo] = useState('');
-  const [address, setAddress] = useState('');
-  const [paymentMode, setPaymentMode] = useState('');
-  const [upiId, setUpiId] = useState('');
+  useEffect(() => {
+    if (product) {
+      setForm((prev) => ({
+        ...prev,
+        product_name: product.name || '', 
+        quantity: product.quantity || 1,
+      }));
+      setTotalPrice(product.totalPrice || product.price || 0);
+    }
+  }, [product]);
+
+  useEffect(() => {
+    if (product) {
+      const pricePerItem = product.price || 0;
+      setTotalPrice(pricePerItem * form.quantity);
+    }
+  }, [form.quantity]);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: name === 'quantity' ? parseInt(value, 10) : value,
+    }));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    if (!productName || !customerName || !customerEmail || !mobileNo || !address || !paymentMode) {
-      alert('Please fill all required fields.');
-      return;
+    for (let key in form) {
+      if (!form[key]) {
+        alert(`Please enter ${key.replace('_', ' ')}`);
+        return;
+      }
     }
 
-    const purchaseData = {
-      product_name: productName,
-      product_price: Number(productPrice) * Number(quantity),
-      quantity: Number(quantity),
-      customer_name: customerName,
-      customer_email: customerEmail,
-      mobile_no: mobileNo,
-      address,
-      payment_mode: paymentMode,
-      upi_id: paymentMode === 'upi' ? upiId : '',
-      created_at: new Date().toISOString(),
+    const order = {
+      ...form,
+      id: Date.now(),
+      product_price: totalPrice,
+      status: 'Pending',
     };
 
-    try {
-      const existingPurchases = JSON.parse(localStorage.getItem("purchases")) || [];
-      localStorage.setItem("purchases", JSON.stringify([...existingPurchases, purchaseData]));
+    const existingOrders = JSON.parse(localStorage.getItem('orders')) || [];
+    localStorage.setItem('orders', JSON.stringify([...existingOrders, order]));
 
-      navigate("/confirm", { state: purchaseData });
-    } catch (error) {
-      console.error("Error saving purchase:", error);
-    }
+    alert('Order placed successfully!');
+    navigate('/');
   };
 
+  if (!product) {
+    return (
+      <div className="text-center mt-20 text-xl text-gray-700">
+        No product selected.
+      </div>
+    );
+  }
+
   return (
-    <div className="p-6 mt-20 text-center bg-gray-50">
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-10">
+      <Navbar />
       <form
         onSubmit={handleSubmit}
-        className="bg-white rounded p-6 w-full max-w-4xl mx-auto shadow-md"
+        className="bg-white p-8 mt-16 rounded shadow max-w-4xl w-full grid grid-cols-1 md:grid-cols-2 gap-6"
       >
-        <h2 className="text-center font-bold text-2xl mb-6">Purchase Form</h2>
+        <h2 className="text-2xl font-bold col-span-full text-center">
+          Purchase Form
+        </h2>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div>
+          <label className="block mb-1 font-medium">Product Name</label>
+          <input
+            type="text"
+            name="product_name"
+            value={form.product_name}
+            readOnly
+            className="w-full border p-2 rounded bg-gray-100"
+          />
+        </div>
 
-          {/* Left Side: Product Info */}
-          <div className="text-left space-y-4">
-            <div>
-              <label className="block font-semibold">Product Name</label>
-              <input type="text" value={productName} readOnly className="w-full border p-2 rounded" />
-            </div>
-            <div>
-              <label className="block font-semibold">Quantity</label>
-              <input
-                type="number"
-                value={quantity}
-                min={1}
-                onChange={(e) => setQuantity(Number(e.target.value))}
-                className="w-full border p-2 rounded"
-              />
-            </div>
-            <div>
-              <p className="mt-2 font-semibold">
-                Total Price: ₹{Number(productPrice) * Number(quantity)}
-              </p>
-            </div>
-          </div>
+        <div>
+          <label className="block mb-1 font-medium">Customer Name</label>
+          <input
+            type="text"
+            name="customer_name"
+            value={form.customer_name}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+            required
+          />
+        </div>
 
-          {/* Right Side: Customer Info */}
-          <div className="text-left space-y-4">
-            <div>
-              <label className="block font-semibold">Customer Name</label>
-              <input
-                type="text"
-                value={customerName}
-                onChange={(e) => setCustomerName(e.target.value)}
-                className="w-full border p-2 rounded"
-              />
-            </div>
-            <div>
-              <label className="block font-semibold">Email</label>
-              <input
-                type="email"
-                value={customerEmail}
-                onChange={(e) => setCustomerEmail(e.target.value)}
-                className="w-full border p-2 rounded"
-              />
-            </div>
-            <div>
-              <label className="block font-semibold">Mobile Number</label>
-              <input
-                type="tel"
-                value={mobileNo}
-                onChange={(e) => setMobileNo(e.target.value)}
-                className="w-full border p-2 rounded"
-              />
-            </div>
-            <div>
-              <label className="block font-semibold">Address</label>
-              <textarea
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-                className="w-full border p-2 rounded"
-                rows={3}
-              ></textarea>
-            </div>
+        <div>
+          <label className="block mb-1 font-medium">Quantity</label>
+          <input
+            type="number"
+            name="quantity"
+            min="1"
+            value={form.quantity}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+          />
+        </div>
 
-            {/* Payment */}
-            <div>
-              <label className="block font-semibold">Payment Mode</label>
-              <div className="flex gap-4">
-                <label>
-                  <input
-                    type="radio"
-                    name="payment_mode"
-                    value="online_payment"
-                    onChange={() => setPaymentMode('online_payment')}
-                    className="mr-1"
-                  />
-                  Online Payment
-                </label>
-                <label>
-                  <input
-                    type="radio"
-                    name="payment_mode"
-                    value="cash"
-                    onChange={() => setPaymentMode('cash')}
-                    className="mr-1"
-                  />
-                  Cash
-                </label>
-              </div>
-              {paymentMode === 'cash' && (
-                <div className="mt-2 text-sm text-gray-500 italic">
-                  Cash will be collected on delivery.
-                </div>
-              )}
-              {paymentMode === 'upi' && (
-                <div className="mt-2">
-                  <label className="block font-semibold">UPI ID</label>
-                  <input
-                    type="text"
-                    value={upiId}
-                    onChange={(e) => setUpiId(e.target.value)}
-                    className="w-full border p-2 rounded"
-                  />
-                </div>
-              )}
-            </div>
+        <div>
+          <label className="block mb-1 font-medium">Email</label>
+          <input
+            type="email"
+            name="customer_email"
+            value={form.customer_email}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">Mobile Number</label>
+          <input
+            type="tel"
+            name="mobile_no"
+            value={form.mobile_no}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+            required
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-medium">Address</label>
+          <textarea
+            name="address"
+            value={form.address}
+            onChange={handleChange}
+            className="w-full border p-2 rounded"
+            required
+          />
+        </div>
+
+        <div className="col-span-full">
+          <label className="block mb-1 font-medium">Payment Mode</label>
+          <div className="flex gap-4 mt-1">
+            <label>
+              <input
+                type="radio"
+                name="payment_mode"
+                value="Online Payment"
+                checked={form.payment_mode === 'Online Payment'}
+                onChange={handleChange}
+              />
+              <span className="ml-2">Online Payment</span>
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="payment_mode"
+                value="Cash"
+                checked={form.payment_mode === 'Cash'}
+                onChange={handleChange}
+              />
+              <span className="ml-2">Cash</span>
+            </label>
           </div>
         </div>
 
-        <div className="text-center mt-8">
+        <div className="col-span-full">
+          <p className="font-semibold mt-4">
+            Total Price: ₹{totalPrice.toFixed(2)}
+          </p>
+        </div>
+
+        <div className="col-span-full flex justify-center">
           <button
             type="submit"
-            className="bg-gradient-to-r from-fuchsia-600 to-pink-500 px-6 py-3 text-white font-bold rounded hover:opacity-90"
+            className="px-6 py-3 rounded bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold"
           >
             Purchase
           </button>

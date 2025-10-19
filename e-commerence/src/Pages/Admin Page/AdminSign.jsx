@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router";
 
-const SignUp = () => {
+const AdminSign = () => {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -22,7 +22,6 @@ const SignUp = () => {
       return;
     }
 
-
     const newUser = { username, email, password };
     localStorage.setItem("user", JSON.stringify(newUser));
 
@@ -31,14 +30,14 @@ const SignUp = () => {
     setPassword("");
     setError("");
 
-    navigate("/login");
+    navigate("/adminlogin");
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-stone-100">
       <div className="bg-white mt-16 border border-stone-300 p-8 rounded-xl shadow-md w-full max-w-md">
         <h1 className="text-center font-bold text-3xl mb-6 text-stone-800">
-          Sign Up
+         Admin Sign Up
         </h1>
 
         <form onSubmit={handleSignup} className="space-y-4">
@@ -96,7 +95,7 @@ const SignUp = () => {
 
           <p className="text-center text-stone-700">
             Already registered?{" "}
-            <Link to="/login" className="text-blue-600 font-bold underline">
+            <Link to="/adminlogin" className="text-blue-600 font-bold underline">
               Login
             </Link>
           </p>
@@ -106,4 +105,4 @@ const SignUp = () => {
   );
 };
 
-export default SignUp;
+export default AdminSign;

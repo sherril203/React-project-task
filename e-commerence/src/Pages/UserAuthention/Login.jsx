@@ -10,17 +10,15 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
 
-    // Basic validation
     if (!email || !password) {
       setError("Please enter both email and password.");
       return;
     }
 
-    // Simulated login (you can replace this with real API logic)
+
     const mockUser = { email, name: "User" };
     localStorage.setItem("user", JSON.stringify(mockUser));
 
-    // Reset form and redirect
     setEmail("");
     setPassword("");
     setError("");

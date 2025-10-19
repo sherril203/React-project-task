@@ -14,6 +14,14 @@ import Success from '../Pages/Buy products/Success';
 import Confirmation from '../Pages/Buy products/Confirmation';
 import Orders from '../Pages/Orders/Orders';
 import ProductInfo from '../Pages/Products/ProductInfo';
+import Dashboard from '../Pages/Admin Page/Dashboard';
+import AdminOrders from '../Pages/Admin Page/AdminOrders';
+import Adminlogin from '../Pages/Admin Page/Adminlogin';
+import AdminSign from '../Pages/Admin Page/AdminSign';
+import AdminProfile from '../Pages/Admin Page/AdminProfile';
+import AdminLayout from '../Pages/Admin Page/AdminLayout';
+import AdminRouters from '../Pages/Admin Page/AdminRouters';
+import Wishlist from '../Pages/Wishlist/Wishlist';
 const Routers = () => {
   return (
    <Routes>
@@ -33,7 +41,19 @@ const Routers = () => {
       <Route path="profile" element={<Profile/>}/>
       <Route path="cart" element={<Cart/>}/>
       <Route path="orders" element={<Orders/>} />
+      <Route path="wishlist" element={<Wishlist/>}/>
       </Route>
+       <Route path="/admin" element={
+          <AdminRouters >
+            <AdminLayout />
+          </AdminRouters>}>
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="orders" element={<AdminOrders />} />
+        </Route>
+
+        <Route path="/admin/profile" element={<AdminProfile/>}/>
+        <Route path="/adminlogin" element={<Adminlogin />} />
+        <Route path="/adminRegister" element={<AdminSign />} />
    </Routes>
   )
 }
